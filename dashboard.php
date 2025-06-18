@@ -1,68 +1,59 @@
-<?php
-include 'conn.php';
-?>
-
+<?php include 'conn.php'; ?> 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Dashboard CSIRT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-        table { border-collapse: collapse; width: 100%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f36c6c; color: white; }
-        h1 { color: #333; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+            display: block;
+        }
+        .sidebar .list-group-item {
+            background: none;
+            border: none;
+            color: white;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
 
-<h1>Dashboard CSIRT Kabupaten/Kota</h1>
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column p-3">
+    <h4 class="text-center mb-4">CSIRT Menu</h4>
+    <div class="list-group">
+        <a href="dashboard.php" class="list-group-item">Dashboard</a>
+        <a href="provinsi.php" class="list-group-item">Data Provinsi</a>
+        <a href="kabkot.php" class="list-group-item">Data Kabupaten/Kota</a>
+    </div>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Kabupaten/Kota</th>
-            <th>Provinsi</th>
-            <th>Email</th>
-            <th>Narahubung 1</th>
-            <th>Narahubung 2</th>
-            <th>Tahun STR</th>
-            <th>Tanggal STR</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = "SELECT kabkot.nama AS kabkot_nama, provinsi.nama AS provinsi_nama, kabkot.email, 
-                       kabkot.narahubung_1, kabkot.narahubung_2, kabkot.tahunSTR, kabkot.tanggalSTR 
-                FROM kabkot
-                JOIN provinsi ON kabkot.id_provinsi = provinsi.id";
+<!-- Main content -->
+<div class="content">
+    <h1 class="mb-4">Dashboard CSIRT</h1>
+    <p>Selamat datang di sistem monitoring CSIRT Provinsi dan Kabupaten/Kota.</p>
 
-        $result = $conn->query($sql);
-        $no = 1;
-
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$no}</td>
-                        <td>{$row['kabkot_nama']}</td>
-                        <td>{$row['provinsi_nama']}</td>
-                        <td>{$row['email']}</td>
-                        <td>{$row['narahubung_1']}</td>
-                        <td>{$row['narahubung_2']}</td>
-                        <td>{$row['tahunSTR']}</td>
-                        <td>{$row['tanggalSTR']}</td>
-                      </tr>";
-                $no++;
-            }
-        } else {
-            echo "<tr><td colspan='8'>Data belum tersedia</td></tr>";
-        }
-
-        $conn->close();
-        ?>
-    </tbody>
-</table>
+    <!-- Di sini nanti kamu bisa menampilkan grafik, tabel, dsb -->
+</div>
 
 </body>
 </html>

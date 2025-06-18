@@ -9,6 +9,7 @@
 <div class="container mt-4">
     <h1 class="mb-4">Dashboard CSIRT</h1>
     <div class="list-group">
+        <a href="dashboard.php" class="list-group-item list-group-item-action">Dashboard</a>
         <a href="provinsi.php" class="list-group-item list-group-item-action">Data Provinsi</a>
         <a href="kabkot.php" class="list-group-item list-group-item-action">Data Kabupaten/Kota</a>
     </div>
