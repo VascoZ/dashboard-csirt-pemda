@@ -37,7 +37,7 @@
 <div class="sidebar d-flex flex-column p-3">
     <h4 class="text-center mb-4">CSIRT Menu</h4>
     <div class="list-group">
-        <a href="dashboard.php" class="list-group-item">Dashboard</a>
+        <a href="index.php" class="list-group-item">Dashboard</a>
         <a href="provinsi.php" class="list-group-item active">Data Provinsi</a>
         <a href="kabkot.php" class="list-group-item">Data Kabupaten/Kota</a>
     </div>
