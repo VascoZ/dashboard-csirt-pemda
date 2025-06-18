@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $narahubung1 = $_POST['narahubung1'];
     $narahubung2 = $_POST['narahubung2'];
     $status = $_POST['status'];
-    $tahunSTR = $_POST['tahunSTR'];
+    $tahunSTR = !empty($_POST['tahunSTR']) ? $_POST['tahunSTR'] : null;
     $tanggalSTR = !empty($_POST['tanggalSTR']) ? $_POST['tanggalSTR'] : null;
 
     $stmt = $conn->prepare("UPDATE provinsi SET 

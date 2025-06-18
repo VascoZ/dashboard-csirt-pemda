@@ -48,8 +48,7 @@
 
     <?php
     if (isset($_POST['simpan'])) {
-        $sql = "INSERT INTO kabkot (nama, id_provinsi, email, narahubung1, narahubung2, status, tahunSTR, tanggalSTR)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sissssss",
             $_POST['nama'],
@@ -58,8 +57,11 @@
             $_POST['narahubung1'],
             $_POST['narahubung2'],
             $_POST['status'],
-            $_POST['tahunSTR'],
-            $_POST['tanggalSTR']
+            $tahunSTR = !empty($_POST['tahunSTR']) ? $_POST['tahunSTR'] : null;
+            $tanggalSTR = !empty($_POST['tanggalSTR']) ? $_POST['tanggalSTR'] : null;
+
+        $sql = "INSERT INTO kabkot (nama, id_provinsi, email, narahubung1, narahubung2, status, tahunSTR, tanggalSTR)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         );
         $stmt->execute();
         echo "<div class='alert alert-success mt-3'>Data berhasil ditambahkan!</div>";

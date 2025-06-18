@@ -51,7 +51,6 @@ $data = $conn->query("SELECT * FROM kabkot WHERE id=$id")->fetch_assoc();
 
 <?php
 if (isset($_POST['update'])) {
-    $sql = "UPDATE kabkot SET nama=?, id_provinsi=?, email=?, narahubung1=?, narahubung2=?, status=?, tahunSTR=?, tanggalSTR=? WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sissssssi", 
         $_POST['nama'],
@@ -60,9 +59,11 @@ if (isset($_POST['update'])) {
         $_POST['narahubung1'],
         $_POST['narahubung2'],
         $_POST['status'],
-        $_POST['tahunSTR'],
-        $_POST['tanggalSTR'],
+        $tahunSTR = !empty($_POST['tahunSTR']) ? $_POST['tahunSTR'] : null;
+        $tanggalSTR = !empty($_POST['tanggalSTR']) ? $_POST['tanggalSTR'] : null;
         $id
+    $sql = "UPDATE kabkot SET nama=?, id_provinsi=?, email=?, narahubung1=?, narahubung2=?, status=?, tahunSTR=?, tanggalSTR=? WHERE id=?";
+
     );
     if ($stmt->execute()) {
         echo "<div class='alert alert-success mt-3'>Data berhasil diupdate!</div>";
