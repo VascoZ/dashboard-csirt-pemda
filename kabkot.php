@@ -55,24 +55,26 @@
     <h2>Data Kabupaten/Kota</h2>
 
     <?php
-    // Total data
+    // Ambil total kabupaten/kota
     $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
     $total_row = $total_result->fetch_assoc();
     echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
 
-    // Total per status
+    // Hitung jumlah berdasarkan status
     $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
     $counts = [];
+
     foreach ($status_list as $s) {
         $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
         $row = $res->fetch_assoc();
         $counts[$s] = $row['total'];
     }
+
     $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
     $counts['Belum Terbentuk'] = $row['total'];
 
-    // Sorting logic
+    // Sorting
     $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
     $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
     $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
@@ -84,6 +86,7 @@
     }
     ?>
 
+    <!-- Status Summary -->
     <div class="mb-3">
         <strong>Total per Status:</strong>
         <ul>
@@ -94,8 +97,10 @@
         </ul>
     </div>
 
+    <!-- Tombol Tambah -->
     <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
+    <!-- Tabel Data -->
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
