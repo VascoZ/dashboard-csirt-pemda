@@ -21,6 +21,6 @@ CREATE TABLE kabkot (
     narahubung2 VARCHAR(100),
     tahunSTR YEAR,
     tanggalSTR DATE,
-    nama_provinsi VARCHAR(100),
+    id_provinsi INT,
     FOREIGN KEY (id_provinsi) REFERENCES provinsi(id)
 );
