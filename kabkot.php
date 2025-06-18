@@ -54,7 +54,7 @@
     echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
 
     // Hitung total per status secara manual
-    $status_list = ['Teregistrasi', 'Terbentuk', 'Progress'];
+    $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
     $counts = [];
 
     foreach ($status_list as $s) {
@@ -74,7 +74,7 @@
         <ul>
             <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
             <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
-            <li>Progress: <?= $counts['Progress'] ?> data</li>
+            <li>Proses: <?= $counts['Proses'] ?> data</li>
             <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
         </ul>
     </div>

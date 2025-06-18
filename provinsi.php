@@ -21,7 +21,8 @@
             border: none;
             color: white;
         }
-        .sidebar .list-group-item:hover {
+        .sidebar .list-group-item:hover,
+        .sidebar .list-group-item.active {
             background-color: #495057;
         }
         .content {
@@ -45,6 +46,39 @@
 <!-- Content -->
 <div class="content">
     <h2>Data Provinsi</h2>
+
+    <?php
+    // Ambil total provinsi
+    $total_result = $conn->query("SELECT COUNT(*) AS total FROM provinsi");
+    $total_row = $total_result->fetch_assoc();
+    echo "<p><strong>Total Provinsi:</strong> {$total_row['total']} data</p>";
+
+    // Hitung jumlah berdasarkan status
+    $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
+    $counts = [];
+
+    foreach ($status_list as $s) {
+        $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status = '$s'");
+        $row = $res->fetch_assoc();
+        $counts[$s] = $row['total'];
+    }
+
+    // Hitung yang belum terbentuk
+    $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status IS NULL OR status = '' OR status = '-'");
+    $row = $res->fetch_assoc();
+    $counts['Belum Terbentuk'] = $row['total'];
+    ?>
+
+    <div class="mb-3">
+        <strong>Total per Status:</strong>
+        <ul>
+            <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
+            <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
+            <li>Proses: <?= $counts['Proses'] ?> data</li>
+            <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
+        </ul>
+    </div>
+
     <a href="provinsi_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
     <table class="table table-bordered table-striped">
         <thead>
@@ -65,13 +99,16 @@
         $result = $conn->query("SELECT * FROM provinsi");
         $no = 1;
         while ($row = $result->fetch_assoc()) {
+            $status_display = trim($row['status']) ?: 'Belum Terbentuk';
+            if ($status_display == '-') $status_display = 'Belum Terbentuk';
+
             echo "<tr>
                 <td>{$no}</td>
                 <td>{$row['nama']}</td>
                 <td>{$row['email']}</td>
                 <td>{$row['narahubung1']}</td>
                 <td>{$row['narahubung2']}</td>
-                <td>{$row['status']}</td>
+                <td>{$status_display}</td>
                 <td>{$row['tahunSTR']}</td>
                 <td>{$row['tanggalSTR']}</td>
                 <td>
