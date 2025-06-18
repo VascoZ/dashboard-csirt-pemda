@@ -88,7 +88,6 @@
                 <td>{$row['status']}</td>
                 <td>{$row['tahunSTR']}</td>
                 <td>{$row['tanggalSTR']}</td>
-                <td>{$row['aksi']}</td>
                 <td>
                     <a href='kabkot_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
                     <a href='kabkot_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
