@@ -26,8 +26,8 @@
             </select>
         </div>
         <div class="mb-2"><label>Email</label><input type="email" name="email" class="form-control"></div>
-        <div class="mb-2"><label>Narahubung 1</label><input type="text" name="narahubung_1" class="form-control"></div>
-        <div class="mb-2"><label>Narahubung 2</label><input type="text" name="narahubung_2" class="form-control"></div>
+        <div class="mb-2"><label>Narahubung 1</label><input type="text" name="narahubung1" class="form-control"></div>
+        <div class="mb-2"><label>Narahubung 2</label><input type="text" name="narahubung2" class="form-control"></div>
         <div class="mb-2"><label>Tahun STR</label><input type="text" name="tahunSTR" class="form-control"></div>
         <div class="mb-2"><label>Tanggal STR</label><input type="date" name="tanggalSTR" class="form-control"></div>
         <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
@@ -36,12 +36,12 @@
 
     <?php
     if (isset($_POST['simpan'])) {
-        $sql = "INSERT INTO kabkot (nama, id_provinsi, email, narahubung_1, narahubung_2, tahunSTR, tanggalSTR)
+        $sql = "INSERT INTO kabkot (nama, id_provinsi, email, narahubung1, narahubung2, tahunSTR, tanggalSTR)
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sisssss",
             $_POST['nama'], $_POST['id_provinsi'], $_POST['email'],
-            $_POST['narahubung_1'], $_POST['narahubung_2'],
+            $_POST['narahubung1'], $_POST['narahubung2'],
             $_POST['tahunSTR'], $_POST['tanggalSTR']
         );
         $stmt->execute();
