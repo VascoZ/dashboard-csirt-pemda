@@ -21,7 +21,8 @@
             border: none;
             color: white;
         }
-        .sidebar .list-group-item:hover {
+        .sidebar .list-group-item:hover,
+        .sidebar .list-group-item.active {
             background-color: #495057;
         }
         .content {
@@ -45,6 +46,15 @@
 <!-- Content -->
 <div class="content">
     <h2>Data Kabupaten/Kota</h2>
+
+    <?php
+    // Ambil total data kabupaten/kota
+    $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
+    $total_row = $total_result->fetch_assoc();
+    $total_kabkot = $total_row['total'];
+    ?>
+    <p><strong>Total Kabupaten/Kota:</strong> <?php echo $total_kabkot; ?> data</p>
+
     <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
     <table class="table table-bordered table-striped">
         <thead>
