@@ -76,7 +76,7 @@
 
     <div class="mb-4">
         <h4>Distribusi Status dalam Pie Chart</h4>
-        <canvas id="statusPieChart" width="400" height="400"></canvas>
+        <canvas id="statusPieChart" width="100" height="100"></canvas>
     </div>
 
 </div>
