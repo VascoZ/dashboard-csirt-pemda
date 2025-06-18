@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tahunSTR = $_POST['tahunSTR'];
     $tanggalSTR = $_POST['tanggalSTR'];
 
-    $conn->query("INSERT INTO provinsi (nama, email, narahubung1, narahubung2, tahunSTR, tanggalSTR) 
-                  VALUES ('$nama', '$email', '$narahubung1', '$narahubung2', '$tahunSTR', '$tanggalSTR')");
+    $conn->query("INSERT INTO provinsi (nama, email, narahubung1, narahubung2,status, tahunSTR, tanggalSTR) 
+                  VALUES ('$nama', '$email', '$narahubung1', '$narahubung2','$status', '$tahunSTR', '$tanggalSTR')");
     header("Location: provinsi.php");
 }
 ?>
@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input name="email" type="email" class="form-control mb-2" placeholder="Email">
         <input name="narahubung1" type="text" class="form-control mb-2" placeholder="Narahubung 1">
         <input name="narahubung2" type="text" class="form-control mb-2" placeholder="Narahubung 2">
+        <input name="status" type="text" class="form-control mb-2" placeholder="status">
         <input name="tahunSTR" type="number" class="form-control mb-2" placeholder="Tahun STR">
         <input name="tanggalSTR" type="date" class="form-control mb-3">
         <button type="submit" class="btn btn-success">Simpan</button>

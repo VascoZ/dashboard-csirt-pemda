@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $narahubung1 = $_POST['narahubung1'];
     $narahubung2 = $_POST['narahubung2'];
+    $status = $_POST['status'];
     $tahunSTR = $_POST['tahunSTR'];
     $tanggalSTR = $_POST['tanggalSTR'];
 
@@ -17,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     email = '$email',
                     narahubung1 = '$narahubung1',
                     narahubung2 = '$narahubung2',
+                    status = '$status'
                     tahunSTR = '$tahunSTR',
                     tanggalSTR = '$tanggalSTR'
                   WHERE id = $id");
@@ -37,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input name="email" type="email" class="form-control mb-2" value="<?= $data['email'] ?>">
         <input name="narahubung1" type="text" class="form-control mb-2" value="<?= $data['narahubung1'] ?>">
         <input name="narahubung2" type="text" class="form-control mb-2" value="<?= $data['narahubung2'] ?>">
+        <input name="status" type="text" class="form-control mb-2" value="<?= $data['status'] ?>">
         <input name="tahunSTR" type="number" class="form-control mb-2" value="<?= $data['tahunSTR'] ?>">
         <input name="tanggalSTR" type="date" class="form-control mb-3" value="<?= $data['tanggalSTR'] ?>">
         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
