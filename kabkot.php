@@ -65,10 +65,10 @@
             <th>Email</th>
             <th>Narahubung 1</th>
             <th>Narahubung 2</th>
+            <th>Status</th>
             <th>Tahun STR</th>
             <th>Tanggal STR</th>
             <th>Aksi</th>
-            <th>status</th>
         </tr>
         </thead>
         <tbody>
@@ -85,9 +85,10 @@
                 <td>{$row['email']}</td>
                 <td>{$row['narahubung1']}</td>
                 <td>{$row['narahubung2']}</td>
+                <td>{$row['status']}</td>
                 <td>{$row['tahunSTR']}</td>
                 <td>{$row['tanggalSTR']}</td>
-                <td>{$row['status']}</td>
+                <td>{$row['aksi']}</td>
                 <td>
                     <a href='kabkot_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
                     <a href='kabkot_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
