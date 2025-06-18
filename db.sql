@@ -1,3 +1,6 @@
+-- Membuat database
+CREATE DATABASE csirt;
+
 -- Gunakan database
 USE csirt;
 
