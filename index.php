@@ -29,14 +29,20 @@
             flex-grow: 1;
             padding: 20px;
         }
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .card h4 {
+            margin-bottom: 15px;
+        }
 
-        /* Ukuran Chart */
         .chart-container {
             width: 300px;
             height: 300px;
             margin: auto;
         }
-
         canvas {
             width: 100% !important;
             height: 100% !important;
@@ -57,10 +63,9 @@
 
 <!-- Content -->
 <div class="content">
-    <h2>Dashboard CSIRT Pemda</h2>
+    <h2 class="mb-4">Dashboard CSIRT Pemda</h2>
 
     <?php
-    // Hitung status CSIRT provinsi
     $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
     $counts = [];
 
@@ -70,21 +75,24 @@
         $counts[$s] = (int)$row['total'];
     }
 
-    // Tambah status kosong/null/strip jadi "Belum Terbentuk"
     $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
     $counts['Belum Terbentuk'] = (int)$row['total'];
     ?>
-    <div class="mb-4">
+
+    <!-- Card 1: Status Summary -->
+    <div class="card p-4">
         <h4>Status CSIRT Provinsi</h4>
-        <ul>
+        <ul class="mb-0">
             <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
             <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
             <li>Proses: <?= $counts['Proses'] ?> data</li>
             <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
         </ul>
     </div>
-    <div class="mb-4 text-center">
+
+    <!-- Card 2: Pie Chart -->
+    <div class="card p-4 text-center">
         <h4>Distribusi Status (Pie Chart)</h4>
         <div class="chart-container">
             <canvas id="statusPieChart"></canvas>
@@ -92,13 +100,13 @@
     </div>
 </div>
 
-<!-- Inject data -->
+<!-- Inject Data to Chart -->
 <script>
     window.statusChartLabels = <?= json_encode(array_keys($counts)) ?>;
     window.statusChartData = <?= json_encode(array_values($counts)) ?>;
 </script>
 
-<!-- ChartJS -->
+<!-- Script Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="chart-status-provinsi.js"></script>
 
