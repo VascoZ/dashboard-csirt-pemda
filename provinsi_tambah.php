@@ -5,6 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $narahubung1 = $_POST['narahubung1'];
     $narahubung2 = $_POST['narahubung2'];
+    $status = $_POST['status'];
     $tahunSTR = $_POST['tahunSTR'];
     $tanggalSTR = $_POST['tanggalSTR'];
 
