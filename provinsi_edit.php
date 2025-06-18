@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Status</label>
             <select name="status" class="form-control" required>
                 <?php
-                $statusOptions = ["Teregistrasi", "Terbentuk", "Progress", "-"];
+                $statusOptions = ["Teregistrasi", "Terbentuk", "Proses", "-"];
                 foreach ($statusOptions as $s) {
                     $selected = ($data['status'] == $s) ? 'selected' : '';
                     echo "<option value=\"$s\" $selected>$s</option>";

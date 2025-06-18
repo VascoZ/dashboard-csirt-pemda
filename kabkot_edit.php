@@ -34,7 +34,7 @@ $data = $conn->query("SELECT * FROM kabkot WHERE id=$id")->fetch_assoc();
             <label>Status</label>
             <select name="status" class="form-control" required>
                 <?php
-                $statusOptions = ["Teregistrasi", "Terbentuk", "Progress", "-"];
+                $statusOptions = ["Teregistrasi", "Terbentuk", "Proses", "-"];
                 foreach ($statusOptions as $status) {
                     $selected = ($data['status'] == $status) ? 'selected' : '';
                     echo "<option value=\"$status\" $selected>$status</option>";

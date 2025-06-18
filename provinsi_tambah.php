@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="">-- Pilih Status --</option>
             <option value="Teregistrasi">Teregistrasi</option>
             <option value="Terbentuk">Terbentuk</option>
-            <option value="Progress">Progress</option>
+            <option value="Proses">Proses</option>
             <option value="-">-</option>
         </select>
 
