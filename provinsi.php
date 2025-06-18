@@ -68,8 +68,8 @@
                 <td>{$no}</td>
                 <td>{$row['nama']}</td>
                 <td>{$row['email']}</td>
-                <td>{$row['narahubung_1']}</td>
-                <td>{$row['narahubung_2']}</td>
+                <td>{$row['narahubung1']}</td>
+                <td>{$row['narahubung2']}</td>
                 <td>{$row['tahunSTR']}</td>
                 <td>{$row['tanggalSTR']}</td>
                 <td>
