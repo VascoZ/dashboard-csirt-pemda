@@ -6,38 +6,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            display: flex;
             min-height: 100vh;
-            background-color: #f1f3f5;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
         }
         .sidebar {
             width: 250px;
             background-color: #343a40;
             color: white;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            padding-top: 60px;
         }
         .sidebar .list-group-item {
             background-color: transparent;
             border: none;
             color: white;
         }
-        .sidebar .list-group-item.active,
-        .sidebar .list-group-item:hover {
+        .sidebar .list-group-item:hover,
+        .sidebar .list-group-item.active {
             background-color: #495057;
         }
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
+        .content {
+            flex-grow: 1;
+            padding: 20px;
         }
-        .table thead th a {
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            background-color: #ffffff;
+        }
+        th a {
             color: inherit;
             text-decoration: none;
         }
-        .table thead th a:hover {
+        th a:hover {
             text-decoration: underline;
+        }
+        .table thead {
+            background-color: #f1f1f1;
         }
     </style>
 </head>
@@ -53,53 +59,59 @@
     </div>
 </div>
 
-<!-- Main Content -->
-<div class="main-content">
-    <h2 class="mb-4">Data Kabupaten/Kota</h2>
+<!-- Content -->
+<div class="content">
+    <div class="card">
+        <h2 class="mb-3">Data Kabupaten/Kota</h2>
 
-    <?php
-    $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
-    $total_row = $total_result->fetch_assoc();
-    echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
+        <?php
+        // Ambil total
+        $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
+        $total_row = $total_result->fetch_assoc();
+        echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
 
-    // Status counts
-    $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
-    $counts = [];
-    foreach ($status_list as $s) {
-        $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
+        // Hitung per status
+        $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
+        $counts = [];
+
+        foreach ($status_list as $s) {
+            $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
+            $row = $res->fetch_assoc();
+            $counts[$s] = $row['total'];
+        }
+
+        $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
         $row = $res->fetch_assoc();
-        $counts[$s] = $row['total'];
-    }
-    $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
-    $row = $res->fetch_assoc();
-    $counts['Belum Terbentuk'] = $row['total'];
+        $counts['Belum Terbentuk'] = $row['total'];
 
-    $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
-    $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
-    $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
-    $new_order = $order === 'asc' ? 'desc' : 'asc';
+        // Sorting
+        $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
+        $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
+        $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+        $new_order = $order === 'asc' ? 'desc' : 'asc';
 
-    function sort_arrow($column, $current, $order) {
-        if ($column !== $current) return '';
-        return $order === 'asc' ? ' ↑' : ' ↓';
-    }
-    ?>
+        function sort_arrow($column, $current, $order) {
+            if ($column !== $current) return '';
+            return $order === 'asc' ? ' ↑' : ' ↓';
+        }
+        ?>
 
-    <div class="mb-3">
-        <strong>Total per Status:</strong>
-        <ul>
-            <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
-            <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
-            <li>Proses: <?= $counts['Proses'] ?> data</li>
-            <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
-        </ul>
-    </div>
+        <!-- Status Summary -->
+        <div class="mb-3">
+            <strong>Total per Status:</strong>
+            <ul>
+                <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
+                <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
+                <li>Proses: <?= $counts['Proses'] ?> data</li>
+                <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
+            </ul>
+        </div>
 
-    <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
+        <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-dark">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
                 <tr>
                     <th>No</th>
                     <?php
@@ -119,13 +131,14 @@
                     ?>
                     <th>Aksi</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <?php
                 $sql = "SELECT kabkot.*, provinsi.nama AS provinsi_nama 
                         FROM kabkot 
                         JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
                         ORDER BY $sort $order";
+
                 $result = $conn->query($sql);
                 $no = 1;
                 while ($row = $result->fetch_assoc()) {
@@ -150,8 +163,9 @@
                     $no++;
                 }
                 ?>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
