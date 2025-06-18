@@ -1,7 +1,3 @@
--- Membuat database
-CREATE DATABASE csirt;
-
--- Gunakan database
 USE csirt;
 
 -- Ubah tabel provinsi agar nama unik
