@@ -96,7 +96,8 @@
         </thead>
         <tbody>
         <?php
-        $result = $conn->query("SELECT * FROM provinsi");
+        // ✅ Query diurutkan berdasarkan nama
+        $result = $conn->query("SELECT * FROM provinsi ORDER BY nama ASC");
         $no = 1;
         while ($row = $result->fetch_assoc()) {
             $status_display = trim($row['status']) ?: 'Belum Terbentuk';
