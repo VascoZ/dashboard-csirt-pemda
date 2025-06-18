@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     email = '$email',
                     narahubung1 = '$narahubung1',
                     narahubung2 = '$narahubung2',
-                    status = '$status'
+                    status = '$status',
                     tahunSTR = '$tahunSTR',
                     tanggalSTR = '$tanggalSTR'
                   WHERE id = $id");
