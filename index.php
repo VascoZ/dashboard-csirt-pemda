@@ -37,7 +37,6 @@
         .card h4 {
             margin-bottom: 15px;
         }
-
         .chart-container {
             width: 300px;
             height: 300px;
@@ -66,49 +65,103 @@
     <h2 class="mb-4">Dashboard CSIRT Pemda</h2>
 
     <?php
+    // Data Provinsi
     $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
-    $counts = [];
+    $counts_prov = [];
 
     foreach ($status_list as $s) {
         $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status = '$s'");
         $row = $res->fetch_assoc();
-        $counts[$s] = (int)$row['total'];
+        $counts_prov[$s] = (int)$row['total'];
     }
 
     $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
-    $counts['Belum Terbentuk'] = (int)$row['total'];
+    $counts_prov['Belum Terbentuk'] = (int)$row['total'];
+
+    // Data Kab/Kot
+    $counts_kabkot = [];
+    foreach ($status_list as $s) {
+        $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
+        $row = $res->fetch_assoc();
+        $counts_kabkot[$s] = (int)$row['total'];
+    }
+
+    $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
+    $row = $res->fetch_assoc();
+    $counts_kabkot['Belum Terbentuk'] = (int)$row['total'];
     ?>
 
-    <!-- Card 1: Status Summary -->
+    <!-- Card 1: Status Provinsi -->
     <div class="card p-4">
         <h4>Status CSIRT Provinsi</h4>
         <ul class="mb-0">
-            <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
-            <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
-            <li>Proses: <?= $counts['Proses'] ?> data</li>
-            <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
+            <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?> data</li>
+            <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> data</li>
+            <li>Proses: <?= $counts_prov['Proses'] ?> data</li>
+            <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> data</li>
         </ul>
     </div>
 
-    <!-- Card 2: Pie Chart -->
-    <div class="card p-4 text-center">
-        <h4>Distribusi Status (Pie Chart)</h4>
-        <div class="chart-container">
-            <canvas id="statusPieChart"></canvas>
+    <!-- Chart Row: Provinsi dan Kabkot -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <h4>Data CSIRT Provinsi</h4>
+                <div class="chart-container">
+                    <canvas id="statusPieChartProvinsi"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <h4>Data CSIRT Kab/Kota</h4>
+                <div class="chart-container">
+                    <canvas id="statusPieChartKabkot"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Inject Data to Chart -->
 <script>
-    window.statusChartLabels = <?= json_encode(array_keys($counts)) ?>;
-    window.statusChartData = <?= json_encode(array_values($counts)) ?>;
+    // Provinsi
+    window.statusChartLabelsProv = <?= json_encode(array_keys($counts_prov)) ?>;
+    window.statusChartDataProv = <?= json_encode(array_values($counts_prov)) ?>;
+
+    // Kabkot
+    window.statusChartLabelsKabkot = <?= json_encode(array_keys($counts_kabkot)) ?>;
+    window.statusChartDataKabkot = <?= json_encode(array_values($counts_kabkot)) ?>;
 </script>
 
-<!-- Script Chart.js -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="chart-status-provinsi.js"></script>
+<script>
+    // Chart Provinsi
+    new Chart(document.getElementById('statusPieChartProvinsi'), {
+        type: 'pie',
+        data: {
+            labels: window.statusChartLabelsProv,
+            datasets: [{
+                data: window.statusChartDataProv,
+                backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#F44336']
+            }]
+        }
+    });
+
+    // Chart Kabkot
+    new Chart(document.getElementById('statusPieChartKabkot'), {
+        type: 'pie',
+        data: {
+            labels: window.statusChartLabelsKabkot,
+            datasets: [{
+                data: window.statusChartDataKabkot,
+                backgroundColor: ['#9C27B0', '#00BCD4', '#FF9800', '#607D8B']
+            }]
+        }
+    });
+</script>
 
 </body>
 </html>
