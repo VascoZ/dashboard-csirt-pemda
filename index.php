@@ -75,8 +75,8 @@
     </div>
 
     <div class="mb-4">
-        <h4>Distribusi Status dalam Pie Chart</h4>
-        <canvas id="statusPieChart" width="100" height="100"></canvas>
+        <h4>Data CSIRT Provinsi</h4>
+        <canvas id="statusPieChart" width="20" height="20"></canvas>
     </div>
 
 </div>
