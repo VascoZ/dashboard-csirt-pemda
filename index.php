@@ -157,7 +157,7 @@
             labels: window.statusChartLabelsKabkot,
             datasets: [{
                 data: window.statusChartDataKabkot,
-                backgroundColor: ['#9C27B0', '#00BCD4', '#FF9800', '#607D8B']
+                backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#F44336']
             }]
         }
     });

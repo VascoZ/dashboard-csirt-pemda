@@ -27,7 +27,7 @@
         }
         .content {
             flex-grow: 1;
-            padding: 30px;
+            padding: 20px;
         }
         .card {
             border-radius: 12px;
@@ -103,8 +103,8 @@
             </ul>
         </div>
 
-        <a href="provinsi_tambah.php" class="btn btn-primary mb-3">+ Tambah Data</a>
-
+        <a href="provinsi_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
+        
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
