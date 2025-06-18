@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $narahubung2 = $_POST['narahubung2'];
     $status = $_POST['status'];
     $tahunSTR = $_POST['tahunSTR'];
-    $tanggalSTR = $_POST['tanggalSTR'];
+    $tanggalSTR = !empty($_POST['tanggalSTR']) ? $_POST['tanggalSTR'] : null;
+
 
     $stmt = $conn->prepare("INSERT INTO provinsi (nama, email, narahubung1, narahubung2, status, tahunSTR, tanggalSTR) 
                             VALUES (?, ?, ?, ?, ?, ?, ?)");

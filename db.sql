@@ -8,8 +8,8 @@ CREATE TABLE provinsi (
     narahubung1 VARCHAR(100),
     narahubung2 VARCHAR(100),
     status VARCHAR(100),
-    tahunSTR YEAR,
-    tanggalSTR DATE
+    tahunSTR YEAR NULL,
+    tanggalSTR DATE NULL
 );
 
 -- Tabel kabkot dengan relasi ke nama provinsi
@@ -20,8 +20,8 @@ CREATE TABLE kabkot (
     narahubung1 VARCHAR(100),
     narahubung2 VARCHAR(100),
     status VARCHAR(100),
-    tahunSTR YEAR,
-    tanggalSTR DATE,
+    tahunSTR YEAR NULL,
+    tanggalSTR DATE NULL,
     id_provinsi INT,
     FOREIGN KEY (id_provinsi) REFERENCES provinsi(id)
 );
