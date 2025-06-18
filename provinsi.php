@@ -57,6 +57,7 @@
             <th>Tahun STR</th>
             <th>Tanggal STR</th>
             <th>Aksi</th>
+            <th>status</th>
         </tr>
         </thead>
         <tbody>
@@ -72,6 +73,7 @@
                 <td>{$row['narahubung2']}</td>
                 <td>{$row['tahunSTR']}</td>
                 <td>{$row['tanggalSTR']}</td>
+                <td>{$row['status']}</td>
                 <td>
                     <a href='provinsi_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
                     <a href='provinsi_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
