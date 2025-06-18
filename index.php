@@ -29,6 +29,18 @@
             flex-grow: 1;
             padding: 20px;
         }
+
+        /* Ukuran Chart */
+        .chart-container {
+            width: 300px;
+            height: 300px;
+            margin: auto;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
     </style>
 </head>
 <body>
@@ -63,7 +75,6 @@
     $row = $res->fetch_assoc();
     $counts['Belum Terbentuk'] = (int)$row['total'];
     ?>
-
     <div class="mb-4">
         <h4>Status CSIRT Provinsi</h4>
         <ul>
@@ -73,19 +84,21 @@
             <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
         </ul>
     </div>
-
-    <div class="mb-4">
-        <h4>Data CSIRT Provinsi</h4>
-        <canvas id="statusPieChart" width="20" height="20"></canvas>
+    <div class="mb-4 text-center">
+        <h4>Distribusi Status (Pie Chart)</h4>
+        <div class="chart-container">
+            <canvas id="statusPieChart"></canvas>
+        </div>
     </div>
-
 </div>
 
-<!-- Chart.js data injection & import -->
+<!-- Inject data -->
 <script>
     window.statusChartLabels = <?= json_encode(array_keys($counts)) ?>;
     window.statusChartData = <?= json_encode(array_values($counts)) ?>;
 </script>
+
+<!-- ChartJS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="chart-status-provinsi.js"></script>
 
