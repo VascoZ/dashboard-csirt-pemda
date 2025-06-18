@@ -7,6 +7,7 @@ CREATE TABLE provinsi (
     email VARCHAR(100),
     narahubung1 VARCHAR(100),
     narahubung2 VARCHAR(100),
+    status VARCHAR(100),
     tahunSTR YEAR,
     tanggalSTR DATE
 );
@@ -18,6 +19,7 @@ CREATE TABLE kabkot (
     email VARCHAR(100),
     narahubung1 VARCHAR(100),
     narahubung2 VARCHAR(100),
+    status VARCHAR(100),
     tahunSTR YEAR,
     tanggalSTR DATE,
     id_provinsi INT,

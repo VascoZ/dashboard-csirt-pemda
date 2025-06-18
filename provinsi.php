@@ -29,6 +29,13 @@
             flex-grow: 1;
             padding: 20px;
         }
+        th a {
+            color: inherit;
+            text-decoration: none;
+        }
+        th a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -63,10 +70,20 @@
         $counts[$s] = $row['total'];
     }
 
-    // Hitung yang belum terbentuk
     $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
     $counts['Belum Terbentuk'] = $row['total'];
+
+    // Sorting logic
+    $allowed_columns = ['nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
+    $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
+    $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+    $new_order = $order === 'asc' ? 'desc' : 'asc';
+
+    function sort_arrow($column, $current, $order) {
+        if ($column !== $current) return '';
+        return $order === 'asc' ? ' ↑' : ' ↓';
+    }
     ?>
 
     <div class="mb-3">
@@ -84,20 +101,25 @@
         <thead>
         <tr>
             <th>No</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Narahubung 1</th>
-            <th>Narahubung 2</th>
-            <th>Status</th>
-            <th>Tahun STR</th>
-            <th>Tanggal STR</th>
+            <?php
+            foreach ([
+                'nama' => 'Nama',
+                'email' => 'Email',
+                'narahubung1' => 'Narahubung 1',
+                'narahubung2' => 'Narahubung 2',
+                'status' => 'Status',
+                'tahunSTR' => 'Tahun STR',
+                'tanggalSTR' => 'Tanggal STR'
+            ] as $key => $label) {
+                echo "<th><a href='?sort={$key}&order=" . ($sort === $key ? $new_order : 'asc') . "'>$label" . sort_arrow($key, $sort, $order) . "</a></th>";
+            }
+            ?>
             <th>Aksi</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        // ✅ Query diurutkan berdasarkan nama
-        $result = $conn->query("SELECT * FROM provinsi ORDER BY nama ASC");
+        $result = $conn->query("SELECT * FROM provinsi ORDER BY $sort $order");
         $no = 1;
         while ($row = $result->fetch_assoc()) {
             $status_display = trim($row['status']) ?: 'Belum Terbentuk';
