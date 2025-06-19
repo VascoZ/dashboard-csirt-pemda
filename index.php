@@ -184,6 +184,13 @@
 </script>
 
 <!-- Chart.js -->
+ <script>
+    window.combinedChartLabels = ['Teregistrasi', 'Belum Terbentuk'];
+    window.combinedChartData = [
+        <?= $total_teregistrasi ?>,
+        <?= $total_belum ?>
+    ];
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     new Chart(document.getElementById('statusPieChartProvinsi'), {
@@ -196,6 +203,24 @@
             }]
         }
     });
+// Chart Gabungan Teregistrasi vs Belum Terbentuk
+new Chart(document.getElementById('combinedChart'), {
+    type: 'doughnut',
+    data: {
+        labels: window.combinedChartLabels,
+        datasets: [{
+            data: window.combinedChartData,
+            backgroundColor: ['#4CAF50', '#F44336']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
 
     new Chart(document.getElementById('statusPieChartKabkot'), {
         type: 'pie',
