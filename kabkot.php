@@ -4,6 +4,7 @@
 <head>
     <title>Data Kabupaten/Kota</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -12,19 +13,46 @@
             font-family: 'Segoe UI', sans-serif;
         }
         .sidebar {
-            width: 250px;
-            background-color: #343a40;
-            color: white;
+            width: 240px;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
         }
+
+        .sidebar h4 {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .sidebar .list-group {
+            width: 100%;
+        }
+
         .sidebar .list-group-item {
-            background-color: transparent;
+            background: none;
             border: none;
-            color: white;
+            color: #b0b3c1;
+            font-size: 16px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s ease;
         }
-        .sidebar .list-group-item:hover,
+
+        .sidebar .list-group-item:hover {
+            background-color: #2c2c44;
+            color: #ffffff;
+        }
+
         .sidebar .list-group-item.active {
-            background-color: #495057;
+            background-color: #0d6efd;
+            color: #ffffff;
+            font-weight: bold;
         }
+
         .content {
             flex-grow: 1;
             padding: 20px;
@@ -50,14 +78,21 @@
 <body>
 
 <!-- Sidebar -->
-<div class="sidebar d-flex flex-column p-3">
+<div class="sidebar">
     <h4 class="text-center mb-4">CSIRT Menu</h4>
     <div class="list-group">
-        <a href="index.php" class="list-group-item">Dashboard</a>
-        <a href="provinsi.php" class="list-group-item">Data Provinsi</a>
-        <a href="kabkot.php" class="list-group-item active">Data Kabupaten/Kota</a>
+        <a href="index.php" class="list-group-item <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+        <a href="provinsi.php" class="list-group-item <?= basename($_SERVER['PHP_SELF']) == 'provinsi.php' ? 'active' : '' ?>">
+            <i class="bi bi-geo-alt"></i> Data Provinsi
+        </a>
+        <a href="kabkot.php" class="list-group-item <?= basename($_SERVER['PHP_SELF']) == 'kabkot.php' ? 'active' : '' ?>">
+            <i class="bi bi-building"></i> Data Kab/Kota
+        </a>
     </div>
 </div>
+
 
 <!-- Content -->
 <div class="content">
