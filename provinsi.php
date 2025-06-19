@@ -67,6 +67,17 @@
             color: inherit;
             text-decoration: none;
         }
+
+        .table td a {
+            color: inherit !important;
+            font-weight: bold;
+        }
+
+        .table td a:hover {
+            text-decoration: underline;
+            color: #0d6efd; /* atau tetap inherit */
+        }
+
         th a:hover {
             text-decoration: underline;
         }
