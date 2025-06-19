@@ -20,16 +20,13 @@
             flex-direction: column;
             padding: 20px 0;
         }
-
         .sidebar h4 {
             color: #ffffff;
             font-weight: bold;
         }
-
         .sidebar .list-group {
             width: 100%;
         }
-
         .sidebar .list-group-item {
             background: none;
             border: none;
@@ -41,18 +38,15 @@
             gap: 12px;
             transition: background 0.2s ease;
         }
-
         .sidebar .list-group-item:hover {
             background-color: #2c2c44;
             color: #ffffff;
         }
-
         .sidebar .list-group-item.active {
             background-color: #0d6efd;
             color: #ffffff;
             font-weight: bold;
         }
-
         .content {
             flex-grow: 1;
             padding: 20px;
@@ -67,17 +61,14 @@
             color: inherit;
             text-decoration: none;
         }
-
         .table td a {
             color: inherit !important;
             font-weight: bold;
         }
-
         .table td a:hover {
             text-decoration: underline;
-            color: #0d6efd; /* atau tetap inherit */
+            color: #0d6efd;
         }
-
         th a:hover {
             text-decoration: underline;
         }
@@ -103,7 +94,6 @@
         </a>
     </div>
 </div>
-
 
 <!-- Content -->
 <div class="content">
@@ -176,23 +166,34 @@
                 <?php
                 $result = $conn->query("SELECT * FROM provinsi ORDER BY $sort $order");
                 $no = 1;
-               while ($row = $result->fetch_assoc()) {
+                while ($row = $result->fetch_assoc()) {
                     $status_display = trim($row['status']) ?: 'Belum Terbentuk';
                     if ($status_display == '-') $status_display = 'Belum Terbentuk';
 
-                    $no_display = $no;
                     $nama_provinsi = htmlspecialchars($row['nama']);
                     $url_provinsi = urlencode($row['nama']);
 
+                    // Cek apakah tanggalSTR sudah lebih dari 3 tahun
+                    $tanggalSTR = $row['tanggalSTR'];
+                    $tanggalSTR_class = '';
+                    if ($tanggalSTR && $tanggalSTR !== '0000-00-00') {
+                        $tgl = new DateTime($tanggalSTR);
+                        $now = new DateTime();
+                        $interval = $tgl->diff($now);
+                        if ($interval->y >= 3) {
+                            $tanggalSTR_class = 'text-danger fw-bold';
+                        }
+                    }
+
                     echo "<tr>
-                        <td>{$no_display}</td>
-                        <td><a href='kabkot.php?search={$url_provinsi}&search_by=provinsi' class='text-decoration-none text-primary'>{$nama_provinsi}</a></td>
+                        <td>{$no}</td>
+                        <td><a href='kabkot.php?search={$url_provinsi}&search_by=provinsi' class='text-decoration-none'>{$nama_provinsi}</a></td>
                         <td>{$row['email']}</td>
                         <td>{$row['narahubung1']}</td>
                         <td>{$row['narahubung2']}</td>
                         <td>{$status_display}</td>
                         <td>{$row['tahunSTR']}</td>
-                        <td>{$row['tanggalSTR']}</td>
+                        <td class='{$tanggalSTR_class}'>{$tanggalSTR}</td>
                         <td>
                             <a href='provinsi_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
                             <a href='provinsi_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
