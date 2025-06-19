@@ -77,15 +77,20 @@
             word-break: break-word;
             white-space: normal;
             vertical-align: middle;
-            font-size: clamp(0.7rem, 1vw, 0.95rem); /* font menyesuaikan panjang teks dan layar */
+            font-size: clamp(0.7rem, 1vw, 0.95rem);
         }
 
+        /* Khusus kolom No agar tidak ikut min-width dan max-width */
         .table td.no-col, .table th.no-col {
-            width: 40px;
+            width: 1%;
+            white-space: nowrap;
+            min-width: unset;
+            max-width: unset;
             text-align: center;
-            padding: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            padding: 6px 10px;
         }
+
 
 
 
