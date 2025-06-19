@@ -134,7 +134,7 @@
         <ul class="mb-0">
             <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
             <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
-            <li>Proses: <?= $counts_kabkot['Proses'] ?> d</li>
+            <li>Proses: <?= $counts_kabkot['Proses'] ?></li>
             <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> </li>
         </ul>
     </div>
