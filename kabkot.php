@@ -197,7 +197,7 @@
 
         <?php
         $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
-        $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
+        $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'provinsi_nama';
         $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
         $new_order = $order === 'asc' ? 'desc' : 'asc';
 
