@@ -99,32 +99,147 @@
         <h2 class="mb-3">Data Kabupaten/Kota</h2>
 
         <?php
-        $result = $conn->query("SELECT kabkot.*, provinsi.nama AS provinsi_nama FROM kabkot JOIN provinsi ON kabkot.id_provinsi = provinsi.id");
+        $search = trim($_GET['search'] ?? '');
+        $search_by = $_GET['search_by'] ?? 'nama';
+
+        $where_clause = '';
+        if ($search !== '') {
+            if ($search_by === 'provinsi') {
+                $search_safe = $conn->real_escape_string($search);
+                $where_clause = "WHERE provinsi.nama = '$search_safe'";
+            } else {
+                $where_clause = "WHERE kabkot.nama LIKE '%$search%'";
+            }
+        }
+
+        // Hitung status berdasarkan filter (jika ada)
+        $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
+        $counts = [];
+
+        foreach ($status_list as $s) {
+            $status_condition = "kabkot.status = '$s'";
+            $sql_count = "SELECT COUNT(*) as total FROM kabkot 
+                          JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
+                          $where_clause " . ($where_clause ? "AND $status_condition" : "WHERE $status_condition");
+            $res = $conn->query($sql_count);
+            $row = $res->fetch_assoc();
+            $counts[$s] = $row['total'];
+        }
+
+        // Hitung status kosong/null/strip
+        $null_condition = "(kabkot.status IS NULL OR kabkot.status = '' OR kabkot.status = '-')";
+        $sql_null = "SELECT COUNT(*) as total FROM kabkot 
+                     JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
+                     $where_clause " . ($where_clause ? "AND $null_condition" : "WHERE $null_condition");
+        $res = $conn->query($sql_null);
+        $row = $res->fetch_assoc();
+        $counts['Belum Terbentuk'] = $row['total'];
         ?>
 
+        <!-- Info jika pencarian berdasarkan provinsi -->
+        <?php if ($search && $search_by === 'provinsi'): ?>
+            <div class="mb-2 text-muted">
+                <em>Menampilkan status berdasarkan provinsi: <strong><?= htmlspecialchars($search) ?></strong></em>
+            </div>
+        <?php endif; ?>
+
+        <!-- Tampilkan total per status -->
+        <div class="mb-3">
+            <strong>Total per Status:</strong>
+            <ul>
+                <li>Teregistrasi: <?= $counts['Teregistrasi'] ?> data</li>
+                <li>Terbentuk: <?= $counts['Terbentuk'] ?> data</li>
+                <li>Proses: <?= $counts['Proses'] ?> data</li>
+                <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
+            </ul>
+        </div>
+
+                <!-- Search Form -->
+        <form class="mb-3" method="get">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                    <input type="text" name="search" class="form-control" placeholder="Cari data..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+                <div class="col-md-3">
+                    <select name="search_by" class="form-select">
+                        <option value="nama" <?= $search_by === 'nama' ? 'selected' : '' ?>>Berdasarkan Nama Kab/Kota</option>
+                        <option value="provinsi" <?= $search_by === 'provinsi' ? 'selected' : '' ?>>Berdasarkan Nama Provinsi</option>
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
+                </div>
+            </div>
+        </form>
+
+        <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
+
+        <?php
+        // Sorting
+        $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
+        $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
+        $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+        $new_order = $order === 'asc' ? 'desc' : 'asc';
+
+        function sort_arrow($column, $current, $order) {
+            if ($column !== $current) return '';
+            return $order === 'asc' ? ' ↑' : ' ↓';
+        }
+
+        // Pagination
+        $per_page = 30;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $per_page;
+
+        // Hitung total hasil
+        $count_sql = "SELECT COUNT(*) as total FROM kabkot 
+                      JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
+                      $where_clause";
+        $count_result = $conn->query($count_sql);
+        $filtered_total = $count_result->fetch_assoc()['total'];
+
+        // Ambil data
+        $sql = "SELECT kabkot.*, provinsi.nama AS provinsi_nama 
+                FROM kabkot 
+                JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
+                $where_clause
+                ORDER BY $sort $order 
+                LIMIT $per_page OFFSET $offset";
+        $result = $conn->query($sql);
+        ?>
+
+        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>No</th>
-                        <th>Kab/Kota</th>
-                        <th>Provinsi</th>
-                        <th>Email</th>
-                        <th>Narahubung 1</th>
-                        <th>Narahubung 2</th>
-                        <th>Status</th>
-                        <th>Tahun STR</th>
-                        <th>Tanggal STR</th>
+                        <?php
+                        $headers = [
+                            'nama' => 'Kab/Kota',
+                            'provinsi_nama' => 'Provinsi',
+                            'email' => 'Email',
+                            'narahubung1' => 'Narahubung 1',
+                            'narahubung2' => 'Narahubung 2',
+                            'status' => 'Status',
+                            'tahunSTR' => 'Tahun STR',
+                            'tanggalSTR' => 'Tanggal STR',
+                        ];
+                        foreach ($headers as $key => $label) {
+                            echo "<th><a href='?page=$page&sort=$key&order=" . ($sort === $key ? $new_order : 'asc') . "&search=" . urlencode($search) . "&search_by=$search_by'>$label" . sort_arrow($key, $sort, $order) . "</a></th>";
+                        }
+                        ?>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $no = 1;
+                <?php
+                    $no = $offset + 1;
                     while ($row = $result->fetch_assoc()) {
                         $status_display = trim($row['status']) ?: 'Belum Terbentuk';
                         if ($status_display == '-') $status_display = 'Belum Terbentuk';
 
+                        // Cek apakah tanggalSTR sudah lebih dari 3 tahun
                         $tanggalSTR = $row['tanggalSTR'];
                         $tanggalSTR_class = '';
                         if ($tanggalSTR && $tanggalSTR !== '0000-00-00') {
@@ -153,10 +268,31 @@
                         </tr>";
                         $no++;
                     }
-                    ?>
+
+                    if ($filtered_total === 0) {
+                        echo "<tr><td colspan='10' class='text-center text-muted'>Data tidak ditemukan</td></tr>";
+                    }
+                ?>
                 </tbody>
+
             </table>
         </div>
+
+        <!-- Pagination -->
+        <?php
+        $total_pages = ceil($filtered_total / $per_page);
+        if ($total_pages > 1):
+        ?>
+        <nav>
+            <ul class="pagination">
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>"><?= $i ?></a>
+                    </li>
+                <?php endfor; ?>
+            </ul>
+        </nav>
+        <?php endif; ?>
 
     </div>
 </div>
