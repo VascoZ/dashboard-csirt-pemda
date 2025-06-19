@@ -222,11 +222,7 @@
 
                     echo "<tr>
                         <td>{$no}</td>
-                        <td>
-                        <a href="kabkot.php?search=<?= urlencode($row['nama']) ?>&search_by=provinsi" class="text-decoration-none text-primary">
-                            <?= htmlspecialchars($row['nama']) ?>
-                        </a>
-                        </td>
+                        <td>{$row['nama']}</td>
                         <td>{$row['provinsi_nama']}</td>
                         <td>{$row['email']}</td>
                         <td>{$row['narahubung1']}</td>
