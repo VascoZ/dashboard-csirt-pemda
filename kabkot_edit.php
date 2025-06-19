@@ -1,6 +1,8 @@
 <?php
 include 'conn.php';
 
+ob_start(); // ➜ Aktifkan output buffering agar header() bisa dipakai kapan saja
+
 $id = $_GET['id'];
 $data = $conn->query("SELECT * FROM kabkot WHERE id = $id")->fetch_assoc();
 
@@ -19,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sissssssi", $nama, $id_provinsi, $email, $narahubung1, $narahubung2, $status, $tahunSTR, $tanggalSTR, $id);
 
     if ($stmt->execute()) {
-        $redirect_url = $_SERVER['HTTP_REFERER'] ?? 'kabkot.php';
-        header("Location: $redirect_url");
+        // ✅ Redirect ke halaman sebelumnya
+        $redirect = $_SERVER['HTTP_REFERER'] ?? 'kabkot.php';
+        header("Location: $redirect");
         exit;
     } else {
-        echo "<div class='alert alert-danger mt-3'>Gagal update: " . $stmt->error . "</div>";
+        $error = "Gagal update: " . $stmt->error;
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,6 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container mt-5">
     <div class="card mx-auto" style="max-width: 650px;">
         <h2 class="text-center">Edit Kab/Kota</h2>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?= $error ?></div>
+        <?php endif; ?>
+
         <form method="POST">
             <div class="mb-3">
                 <label>Nama Kab/Kota</label>
