@@ -1,4 +1,5 @@
-<?php include 'conn.php';
+<?php
+include 'conn.php';
 
 $id = $_GET['id'];
 $data = $conn->query("SELECT * FROM kabkot WHERE id = $id")->fetch_assoc();
@@ -18,7 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sissssssi", $nama, $id_provinsi, $email, $narahubung1, $narahubung2, $status, $tahunSTR, $tanggalSTR, $id);
 
     if ($stmt->execute()) {
-        echo "<div class='alert alert-success mt-3'>Data berhasil diupdate!</div>";
+        $redirect_url = $_SERVER['HTTP_REFERER'] ?? 'kabkot.php';
+        header("Location: $redirect_url");
+        exit;
     } else {
         echo "<div class='alert alert-danger mt-3'>Gagal update: " . $stmt->error . "</div>";
     }
@@ -83,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select name="status" class="form-control" required>
                     <?php
                     $statusOptions = ["Teregistrasi", "Terbentuk", "Proses", "-"];
-                    foreach ($statusOptions as $status) {
-                        $selected = ($data['status'] == $status) ? 'selected' : '';
-                        echo "<option value=\"$status\" $selected>$status</option>";
+                    foreach ($statusOptions as $s) {
+                        $selected = ($data['status'] == $s) ? 'selected' : '';
+                        echo "<option value=\"$s\" $selected>$s</option>";
                     }
                     ?>
                 </select>
