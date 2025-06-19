@@ -165,17 +165,17 @@
                 <?php
                 $result = $conn->query("SELECT * FROM provinsi ORDER BY $sort $order");
                 $no = 1;
-                while ($row = $result->fetch_assoc()) {
+               while ($row = $result->fetch_assoc()) {
                     $status_display = trim($row['status']) ?: 'Belum Terbentuk';
                     if ($status_display == '-') $status_display = 'Belum Terbentuk';
 
+                    $no_display = $no;
+                    $nama_provinsi = htmlspecialchars($row['nama']);
+                    $url_provinsi = urlencode($row['nama']);
+
                     echo "<tr>
-                        <td>{$no}</td>
-                        <td>
-                            <a href="kabkot.php?search=<?= urlencode($row['nama']) ?>&search_by=provinsi" class="text-decoration-none text-primary">
-                                <?= htmlspecialchars($row['nama']) ?>
-                            </a>
-                        </td>
+                        <td>{$no_display}</td>
+                        <td><a href='kabkot.php?search={$url_provinsi}&search_by=provinsi' class='text-decoration-none text-primary'>{$nama_provinsi}</a></td>
                         <td>{$row['email']}</td>
                         <td>{$row['narahubung1']}</td>
                         <td>{$row['narahubung2']}</td>
