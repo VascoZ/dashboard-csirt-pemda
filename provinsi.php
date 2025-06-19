@@ -75,6 +75,28 @@
         .table thead {
             background-color: #f1f1f1;
         }
+
+        /* Tambahan untuk kolom lebar tetap dan font dinamis */
+        .table td {
+            max-width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+        .table td.small-font {
+            font-size: 13px;
+        }
+        .table td.tiny-font {
+            font-size: 11px;
+        }
+        .table td:hover {
+            white-space: normal;
+            overflow: visible;
+            position: relative;
+            z-index: 1;
+            background-color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -173,7 +195,6 @@
                     $nama_provinsi = htmlspecialchars($row['nama']);
                     $url_provinsi = urlencode($row['nama']);
 
-                    // Cek apakah tanggalSTR sudah lebih dari 3 tahun
                     $tanggalSTR = $row['tanggalSTR'];
                     $tanggalSTR_class = '';
                     if ($tanggalSTR && $tanggalSTR !== '0000-00-00') {
@@ -207,6 +228,20 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript untuk mengatur font berdasarkan panjang string -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.table td').forEach(cell => {
+        const text = cell.textContent.trim();
+        if (text.length > 40) {
+            cell.classList.add('tiny-font');
+        } else if (text.length > 20) {
+            cell.classList.add('small-font');
+        }
+    });
+});
+</script>
 
 </body>
 </html>
