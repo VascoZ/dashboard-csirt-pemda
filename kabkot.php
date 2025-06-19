@@ -105,7 +105,8 @@
         $where_clause = '';
         if ($search !== '') {
             if ($search_by === 'provinsi') {
-                $where_clause = "WHERE provinsi.nama LIKE '%$search%'";
+                $search_safe = $conn->real_escape_string($search);
+                $where_clause = "WHERE provinsi.nama = '$search_safe'";
             } else {
                 $where_clause = "WHERE kabkot.nama LIKE '%$search%'";
             }
