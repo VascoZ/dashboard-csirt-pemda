@@ -9,6 +9,7 @@
             display: flex;
             min-height: 100vh;
             background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
         }
         .sidebar {
             width: 250px;
@@ -78,6 +79,7 @@
     $res = $conn->query("SELECT COUNT(*) as total FROM provinsi WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
     $counts_prov['Belum Terbentuk'] = (int)$row['total'];
+    $total_prov = array_sum($counts_prov);
 
     // Data Kab/Kot
     $counts_kabkot = [];
@@ -90,11 +92,22 @@
     $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
     $row = $res->fetch_assoc();
     $counts_kabkot['Belum Terbentuk'] = (int)$row['total'];
+    $total_kabkot = array_sum($counts_kabkot);
     ?>
 
-    <!-- Card 1: Status Provinsi -->
+    <!-- Card: Total Gabungan -->
     <div class="card p-4">
-        <h4>Status CSIRT Provinsi</h4>
+        <h4>Total CSIRT Seluruh Indonesia</h4>
+        <p class="mb-0">
+            <strong>Total Provinsi:</strong> <?= $total_prov ?> data<br>
+            <strong>Total Kab/Kota:</strong> <?= $total_kabkot ?> data<br>
+            <strong>Total Keseluruhan:</strong> <?= $total_prov + $total_kabkot ?> data
+        </p>
+    </div>
+
+    <!-- Card: Status Provinsi -->
+    <div class="card p-4">
+        <h4>CSIRT Provinsi</h4>
         <ul class="mb-0">
             <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?> data</li>
             <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> data</li>
@@ -103,7 +116,18 @@
         </ul>
     </div>
 
-    <!-- Chart Row: Provinsi dan Kabkot -->
+    <!-- Card: Status Kab/Kota -->
+    <div class="card p-4">
+        <h4>CSIRT Kab/Kota</h4>
+        <ul class="mb-0">
+            <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> data</li>
+            <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> data</li>
+            <li>Proses: <?= $counts_kabkot['Proses'] ?> data</li>
+            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> data</li>
+        </ul>
+    </div>
+
+    <!-- Chart Row -->
     <div class="row">
         <div class="col-md-6">
             <div class="card p-4 text-center">
@@ -126,11 +150,9 @@
 
 <!-- Inject Data to Chart -->
 <script>
-    // Provinsi
     window.statusChartLabelsProv = <?= json_encode(array_keys($counts_prov)) ?>;
     window.statusChartDataProv = <?= json_encode(array_values($counts_prov)) ?>;
 
-    // Kabkot
     window.statusChartLabelsKabkot = <?= json_encode(array_keys($counts_kabkot)) ?>;
     window.statusChartDataKabkot = <?= json_encode(array_values($counts_kabkot)) ?>;
 </script>
@@ -138,7 +160,6 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Chart Provinsi
     new Chart(document.getElementById('statusPieChartProvinsi'), {
         type: 'pie',
         data: {
@@ -150,7 +171,6 @@
         }
     });
 
-    // Chart Kabkot
     new Chart(document.getElementById('statusPieChartKabkot'), {
         type: 'pie',
         data: {
