@@ -113,7 +113,6 @@
         </p>
         <p class="mb-0">
             <strong>Total CSIRT Teregistrasi Administrasi Pemerintah:</strong> <?= $total_teregistrasi ?> <br>
-            <strong>Total Terbentuk:</strong> <?= $total_terbentuk ?> <br>
             <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> 
         </p>
     </div>
@@ -144,7 +143,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card p-4 text-center">
-                <h4>Gabungan CSIRT (Teregistrasi vs Belum Terbentuk)</h4>
+                <h4>TOTAL CSIRT</h4>
                 <div class="chart-container">
                     <canvas id="combinedChart"></canvas>
                 </div>

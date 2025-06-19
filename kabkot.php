@@ -65,25 +65,27 @@
         <h2 class="mb-3">Data Kabupaten/Kota</h2>
 
         <?php
-        $headers = [
-            'nama' => 'Kab/Kota',
-            'provinsi_nama' => 'Provinsi',
-            'email' => 'Email',
-            'narahubung1' => 'Narahubung 1',
-            'narahubung2' => 'Narahubung 2',
-            'status' => 'Status',
-            'tahunSTR' => 'Tahun STR',
-            'tanggalSTR' => 'Tanggal STR',
-        ];
+        // Hitung total data
+        $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
+        $total_row = $total_result->fetch_assoc();
+        echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
 
-        $per_page = 30;
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-        $offset = ($page - 1) * $per_page;
+        // Hitung per status
+        $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
+        $counts = [];
 
-        $search = $_GET['search'] ?? '';
-        $filter_by = $_GET['filter_by'] ?? '';
+        foreach ($status_list as $s) {
+            $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
+            $row = $res->fetch_assoc();
+            $counts[$s] = $row['total'];
+        }
 
-        $allowed_columns = array_keys($headers);
+        $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
+        $row = $res->fetch_assoc();
+        $counts['Belum Terbentuk'] = $row['total'];
+
+        // Sort
+        $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
         $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
         $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
         $new_order = $order === 'asc' ? 'desc' : 'asc';
@@ -93,40 +95,32 @@
             return $order === 'asc' ? ' ↑' : ' ↓';
         }
 
-        $where_clause = '';
-        if (!empty($search) && !empty($filter_by) && in_array($filter_by, $allowed_columns)) {
-            $search_escaped = $conn->real_escape_string($search);
-            $where_clause = "WHERE $filter_by LIKE '%$search_escaped%'";
-        }
+        // Pagination
+        $per_page = 30;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $per_page;
 
+        // Search default by 'nama'
+        $search = trim($_GET['search'] ?? '');
+        $where_clause = $search ? "WHERE kabkot.nama LIKE '%$search%'" : '';
+
+        // Count filtered total
         $count_sql = "SELECT COUNT(*) as total FROM kabkot JOIN provinsi ON kabkot.id_provinsi = provinsi.id $where_clause";
         $count_result = $conn->query($count_sql);
-        $total_data = $count_result->fetch_assoc()['total'];
-        $total_pages = ceil($total_data / $per_page);
+        $filtered_total = $count_result->fetch_assoc()['total'];
 
+        // Data query
         $sql = "SELECT kabkot.*, provinsi.nama AS provinsi_nama 
                 FROM kabkot 
-                JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
-                $where_clause 
+                JOIN provinsi ON kabkot.id_provinsi = provinsi.id
+                $where_clause
                 ORDER BY $sort $order 
                 LIMIT $per_page OFFSET $offset";
 
-        $result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
-        $total_row = $result->fetch_assoc();
-        echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
-
-        $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
-        $counts = [];
-        foreach ($status_list as $s) {
-            $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status = '$s'");
-            $row = $res->fetch_assoc();
-            $counts[$s] = $row['total'];
-        }
-        $res = $conn->query("SELECT COUNT(*) as total FROM kabkot WHERE status IS NULL OR status = '' OR status = '-'");
-        $row = $res->fetch_assoc();
-        $counts['Belum Terbentuk'] = $row['total'];
+        $result = $conn->query($sql);
         ?>
 
+        <!-- Status Summary -->
         <div class="mb-3">
             <strong>Total per Status:</strong>
             <ul>
@@ -137,43 +131,47 @@
             </ul>
         </div>
 
-        <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
-
-        <form method="GET" class="row g-2 mb-3">
-            <div class="col-md-3">
-                <input type="text" name="search" class="form-control" placeholder="Cari data..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-            </div>
-            <div class="col-md-3">
-                <select name="filter_by" class="form-select">
-                    <option value="">Filter Kolom</option>
-                    <?php foreach ($headers as $key => $label): ?>
-                        <option value="<?= $key ?>" <?= ($_GET['filter_by'] ?? '') === $key ? 'selected' : '' ?>><?= $label ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary">Cari</button>
+        <!-- Search Form -->
+        <form class="mb-3" method="get">
+            <div class="input-group" style="max-width: 400px;">
+                <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan Nama" value="<?= htmlspecialchars($search) ?>">
+                <button class="btn btn-outline-secondary" type="submit">Cari</button>
             </div>
         </form>
 
+        <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
+
+        <!-- Tabel Data -->
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                 <tr>
                     <th>No</th>
-                    <?php foreach ($headers as $key => $label): ?>
-                        <th><a href="?<?= http_build_query(array_merge($_GET, ['sort' => $key, 'order' => ($sort === $key ? $new_order : 'asc')])) ?>"><?= $label . sort_arrow($key, $sort, $order) ?></a></th>
-                    <?php endforeach; ?>
+                    <?php
+                    $headers = [
+                        'nama' => 'Kab/Kota',
+                        'provinsi_nama' => 'Provinsi',
+                        'email' => 'Email',
+                        'narahubung1' => 'Narahubung 1',
+                        'narahubung2' => 'Narahubung 2',
+                        'status' => 'Status',
+                        'tahunSTR' => 'Tahun STR',
+                        'tanggalSTR' => 'Tanggal STR',
+                    ];
+                    foreach ($headers as $key => $label) {
+                        echo "<th><a href='?sort={$key}&order=" . ($sort === $key ? $new_order : 'asc') . "&search=" . urlencode($search) . "'>$label" . sort_arrow($key, $sort, $order) . "</a></th>";
+                    }
+                    ?>
                     <th>Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                $result = $conn->query($sql);
                 $no = $offset + 1;
                 while ($row = $result->fetch_assoc()) {
                     $status_display = trim($row['status']) ?: 'Belum Terbentuk';
                     if ($status_display == '-') $status_display = 'Belum Terbentuk';
+
                     echo "<tr>
                         <td>{$no}</td>
                         <td>{$row['nama']}</td>
@@ -196,15 +194,21 @@
             </table>
         </div>
 
+        <!-- Pagination -->
+        <?php
+        $total_pages = ceil($filtered_total / $per_page);
+        if ($total_pages > 1):
+        ?>
         <nav>
             <ul class="pagination">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
         </nav>
+        <?php endif; ?>
     </div>
 </div>
 
