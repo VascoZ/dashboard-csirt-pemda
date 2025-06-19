@@ -172,9 +172,11 @@
                     echo "<tr>
                         <td>{$no}</td>
                         <td>
-                            <a href="kabkot.php?search=<?= urlencode($row['nama']) ?>&search_by=provinsi" class="text-decoration-none text-primary">
-                                <?= htmlspecialchars($row['nama']) ?>
-                            </a>
+                            <?php
+                                $provinsiNama = htmlspecialchars($row['nama']);
+                                $provinsiUrl = urlencode($row['nama']);
+                                echo "<a href='kabkot.php?search={$provinsiUrl}&search_by=provinsi' class='text-decoration-none text-primary'>{$provinsiNama}</a>";
+                            ?>
                         </td>
                         <td>{$row['email']}</td>
                         <td>{$row['narahubung1']}</td>
