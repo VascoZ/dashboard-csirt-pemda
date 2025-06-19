@@ -69,14 +69,18 @@
         }
 
         /* Responsive table column control */
+        
         .table td, .table th {
             max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            min-width: 120px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
             vertical-align: middle;
-            font-size: 0.92rem;
+            font-size: clamp(0.7rem, 1vw, 0.95rem); /* font menyesuaikan panjang teks dan layar */
         }
+
+
 
         @media (max-width: 992px) {
             .table td, .table th {
