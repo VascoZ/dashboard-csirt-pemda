@@ -80,6 +80,13 @@
             font-size: clamp(0.7rem, 1vw, 0.95rem); /* font menyesuaikan panjang teks dan layar */
         }
 
+        .table td.no-col, .table th.no-col {
+            width: 40px;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
 
 
         @media (max-width: 992px) {
@@ -217,7 +224,7 @@
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>No</th>
+                        <th class="no-col">No</th>
                         <?php
                         $headers = [
                             'nama' => 'Kab/Kota',
@@ -255,7 +262,7 @@
                     }
 
                     echo "<tr>
-                        <td>{$no}</td>
+                        <td class='no-col'>{$no}</td>
                         <td>{$row['nama']}</td>
                         <td>{$row['provinsi_nama']}</td>
                         <td>{$row['email']}</td>
