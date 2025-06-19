@@ -98,32 +98,49 @@
     <!-- Card: Total Gabungan -->
     <div class="card p-4">
         <h4>Total CSIRT Seluruh Indonesia</h4>
-        <p class="mb-0">
+        <?php
+        $total_all = $total_prov + $total_kabkot;
+
+        // Gabungan status
+        $total_teregistrasi = $counts_prov['Teregistrasi'] + $counts_kabkot['Teregistrasi'];
+        $total_terbentuk = $counts_prov['Terbentuk'] + $counts_kabkot['Terbentuk'];
+        $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
+        $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
+        ?>
+
+        <p class="mb-2">
             <strong>Total Provinsi:</strong> <?= $total_prov ?> data<br>
             <strong>Total Kab/Kota:</strong> <?= $total_kabkot ?> data<br>
-            <strong>Total Keseluruhan:</strong> <?= $total_prov + $total_kabkot ?> data
+            <strong>Total Keseluruhan:</strong> <?= $total_all ?> data
+        </p>
+        <p class="mb-0">
+            <strong>Total Teregistrasi:</strong> <?= $total_teregistrasi ?> data<br>
+            <strong>Total Terbentuk:</strong> <?= $total_terbentuk ?> data<br>
+            <strong>Total Proses:</strong> <?= $total_proses ?> data<br>
+            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> data
         </p>
     </div>
 
-    <!-- Card: Status Provinsi -->
-    <div class="card p-4">
-        <h4>CSIRT Provinsi</h4>
-        <ul class="mb-0">
-            <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?> data</li>
-            <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> data</li>
-            <li>Proses: <?= $counts_prov['Proses'] ?> data</li>
-            <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> data</li>
-        </ul>
-    </div>
+
+        <!-- Card: Status Provinsi -->
+        <div class="card p-4">
+            <h4>CSIRT Provinsi</h4>
+            <ul class="mb-0">
+                <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?></li>
+                <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> d</li>
+                <li>Proses: <?= $counts_prov['Proses'] ?> </li>
+                <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> </li>
+            </ul>
+        </div>
 
     <!-- Card: Status Kab/Kota -->
     <div class="card p-4">
         <h4>CSIRT Kab/Kota</h4>
         <ul class="mb-0">
-            <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> data</li>
-            <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> data</li>
-            <li>Proses: <?= $counts_kabkot['Proses'] ?> data</li>
-            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> data</li>
+            <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
+            <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
+            <li>Proses: <?= $counts_kabkot['Proses'] ?> d</li>
+            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> d</li>
         </ul>
     </div>
 
