@@ -65,12 +65,6 @@
         <h2 class="mb-3">Data Kabupaten/Kota</h2>
 
         <?php
-        // Hitung total data
-        $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
-        $total_row = $total_result->fetch_assoc();
-        echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
-
-        // Hitung per status
         $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
         $counts = [];
 
@@ -84,7 +78,7 @@
         $row = $res->fetch_assoc();
         $counts['Belum Terbentuk'] = $row['total'];
 
-        // Sort
+        // Sorting
         $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
         $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
         $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
@@ -95,21 +89,30 @@
             return $order === 'asc' ? ' ↑' : ' ↓';
         }
 
-        // Pagination
+        // Pagination & Search
         $per_page = 30;
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $offset = ($page - 1) * $per_page;
 
-        // Search default by 'nama'
         $search = trim($_GET['search'] ?? '');
-        $where_clause = $search ? "WHERE kabkot.nama LIKE '%$search%'" : '';
+        $search_by = $_GET['search_by'] ?? 'nama';
+
+        // Filter clause
+        $where_clause = '';
+        if ($search !== '') {
+            if ($search_by === 'provinsi') {
+                $where_clause = "WHERE provinsi.nama LIKE '%$search%'";
+            } else {
+                $where_clause = "WHERE kabkot.nama LIKE '%$search%'";
+            }
+        }
 
         // Count filtered total
         $count_sql = "SELECT COUNT(*) as total FROM kabkot JOIN provinsi ON kabkot.id_provinsi = provinsi.id $where_clause";
         $count_result = $conn->query($count_sql);
         $filtered_total = $count_result->fetch_assoc()['total'];
 
-        // Data query
+        // Query data
         $sql = "SELECT kabkot.*, provinsi.nama AS provinsi_nama 
                 FROM kabkot 
                 JOIN provinsi ON kabkot.id_provinsi = provinsi.id
@@ -133,15 +136,25 @@
 
         <!-- Search Form -->
         <form class="mb-3" method="get">
-            <div class="input-group" style="max-width: 400px;">
-                <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan Nama" value="<?= htmlspecialchars($search) ?>">
-                <button class="btn btn-outline-secondary" type="submit">Cari</button>
+            <div class="row g-2 align-items-center">
+                <div class="col-md-3">
+                    <input type="text" name="search" class="form-control" placeholder="Cari data..." value="<?= htmlspecialchars($search) ?>">
+                </div>
+                <div class="col-md-3">
+                    <select name="search_by" class="form-select">
+                        <option value="nama" <?= $search_by === 'nama' ? 'selected' : '' ?>>Berdasarkan Nama Kab/Kota</option>
+                        <option value="provinsi" <?= $search_by === 'provinsi' ? 'selected' : '' ?>>Berdasarkan Nama Provinsi</option>
+                    </select>
+                </div>
+                <div class="col-md-auto">
+                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
+                </div>
             </div>
         </form>
 
         <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
-        <!-- Tabel Data -->
+        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
@@ -159,7 +172,7 @@
                         'tanggalSTR' => 'Tanggal STR',
                     ];
                     foreach ($headers as $key => $label) {
-                        echo "<th><a href='?sort={$key}&order=" . ($sort === $key ? $new_order : 'asc') . "&search=" . urlencode($search) . "'>$label" . sort_arrow($key, $sort, $order) . "</a></th>";
+                        echo "<th><a href='?sort={$key}&order=" . ($sort === $key ? $new_order : 'asc') . "&search=" . urlencode($search) . "&search_by=" . $search_by . "'>$label" . sort_arrow($key, $sort, $order) . "</a></th>";
                     }
                     ?>
                     <th>Aksi</th>
@@ -203,12 +216,13 @@
             <ul class="pagination">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>"><?= $i ?></a>
+                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
         </nav>
         <?php endif; ?>
+
     </div>
 </div>
 
