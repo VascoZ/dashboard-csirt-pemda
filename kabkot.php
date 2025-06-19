@@ -20,16 +20,13 @@
             flex-direction: column;
             padding: 20px 0;
         }
-
         .sidebar h4 {
             color: #ffffff;
             font-weight: bold;
         }
-
         .sidebar .list-group {
             width: 100%;
         }
-
         .sidebar .list-group-item {
             background: none;
             border: none;
@@ -41,18 +38,15 @@
             gap: 12px;
             transition: background 0.2s ease;
         }
-
         .sidebar .list-group-item:hover {
             background-color: #2c2c44;
             color: #ffffff;
         }
-
         .sidebar .list-group-item.active {
             background-color: #0d6efd;
             color: #ffffff;
             font-weight: bold;
         }
-
         .content {
             flex-grow: 1;
             padding: 20px;
@@ -72,6 +66,22 @@
         }
         .table thead {
             background-color: #f1f1f1;
+        }
+
+        /* Responsive table column control */
+        .table td, .table th {
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            font-size: 0.92rem;
+        }
+
+        @media (max-width: 992px) {
+            .table td, .table th {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -112,7 +122,6 @@
             }
         }
 
-        // Hitung status berdasarkan filter (jika ada)
         $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
         $counts = [];
 
@@ -126,7 +135,6 @@
             $counts[$s] = $row['total'];
         }
 
-        // Hitung status kosong/null/strip
         $null_condition = "(kabkot.status IS NULL OR kabkot.status = '' OR kabkot.status = '-')";
         $sql_null = "SELECT COUNT(*) as total FROM kabkot 
                      JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
@@ -136,14 +144,12 @@
         $counts['Belum Terbentuk'] = $row['total'];
         ?>
 
-        <!-- Info jika pencarian berdasarkan provinsi -->
         <?php if ($search && $search_by === 'provinsi'): ?>
             <div class="mb-2 text-muted">
                 <em>Menampilkan status berdasarkan provinsi: <strong><?= htmlspecialchars($search) ?></strong></em>
             </div>
         <?php endif; ?>
 
-        <!-- Tampilkan total per status -->
         <div class="mb-3">
             <strong>Total per Status:</strong>
             <ul>
@@ -154,7 +160,6 @@
             </ul>
         </div>
 
-                <!-- Search Form -->
         <form class="mb-3" method="get">
             <div class="row g-2 align-items-center">
                 <div class="col-md-3">
@@ -175,7 +180,6 @@
         <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
         <?php
-        // Sorting
         $allowed_columns = ['nama', 'provinsi_nama', 'email', 'narahubung1', 'narahubung2', 'status', 'tahunSTR', 'tanggalSTR'];
         $sort = in_array($_GET['sort'] ?? '', $allowed_columns) ? $_GET['sort'] : 'nama';
         $order = ($_GET['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
@@ -186,19 +190,16 @@
             return $order === 'asc' ? ' ↑' : ' ↓';
         }
 
-        // Pagination
         $per_page = 30;
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $offset = ($page - 1) * $per_page;
 
-        // Hitung total hasil
         $count_sql = "SELECT COUNT(*) as total FROM kabkot 
                       JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
                       $where_clause";
         $count_result = $conn->query($count_sql);
         $filtered_total = $count_result->fetch_assoc()['total'];
 
-        // Ambil data
         $sql = "SELECT kabkot.*, provinsi.nama AS provinsi_nama 
                 FROM kabkot 
                 JOIN provinsi ON kabkot.id_provinsi = provinsi.id 
@@ -208,7 +209,6 @@
         $result = $conn->query($sql);
         ?>
 
-        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
@@ -234,47 +234,45 @@
                 </thead>
                 <tbody>
                 <?php
-                    $no = $offset + 1;
-                    while ($row = $result->fetch_assoc()) {
-                        $status_display = trim($row['status']) ?: 'Belum Terbentuk';
-                        if ($status_display == '-') $status_display = 'Belum Terbentuk';
+                $no = $offset + 1;
+                while ($row = $result->fetch_assoc()) {
+                    $status_display = trim($row['status']) ?: 'Belum Terbentuk';
+                    if ($status_display == '-') $status_display = 'Belum Terbentuk';
 
-                        // Cek apakah tanggalSTR sudah lebih dari 3 tahun
-                        $tanggalSTR = $row['tanggalSTR'];
-                        $tanggalSTR_class = '';
-                        if ($tanggalSTR && $tanggalSTR !== '0000-00-00') {
-                            $tgl = new DateTime($tanggalSTR);
-                            $now = new DateTime();
-                            $interval = $tgl->diff($now);
-                            if ($interval->y >= 3) {
-                                $tanggalSTR_class = 'text-danger fw-bold';
-                            }
+                    $tanggalSTR = $row['tanggalSTR'];
+                    $tanggalSTR_class = '';
+                    if ($tanggalSTR && $tanggalSTR !== '0000-00-00') {
+                        $tgl = new DateTime($tanggalSTR);
+                        $now = new DateTime();
+                        $interval = $tgl->diff($now);
+                        if ($interval->y >= 3) {
+                            $tanggalSTR_class = 'text-danger fw-bold';
                         }
-
-                        echo "<tr>
-                            <td>{$no}</td>
-                            <td>{$row['nama']}</td>
-                            <td>{$row['provinsi_nama']}</td>
-                            <td>{$row['email']}</td>
-                            <td>{$row['narahubung1']}</td>
-                            <td>{$row['narahubung2']}</td>
-                            <td>{$status_display}</td>
-                            <td>{$row['tahunSTR']}</td>
-                            <td class='{$tanggalSTR_class}'>" . htmlspecialchars($tanggalSTR) . "</td>
-                            <td>
-                                <a href='kabkot_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
-                                <a href='kabkot_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
-                            </td>
-                        </tr>";
-                        $no++;
                     }
 
-                    if ($filtered_total === 0) {
-                        echo "<tr><td colspan='10' class='text-center text-muted'>Data tidak ditemukan</td></tr>";
-                    }
+                    echo "<tr>
+                        <td>{$no}</td>
+                        <td>{$row['nama']}</td>
+                        <td>{$row['provinsi_nama']}</td>
+                        <td>{$row['email']}</td>
+                        <td>{$row['narahubung1']}</td>
+                        <td>{$row['narahubung2']}</td>
+                        <td>{$status_display}</td>
+                        <td>{$row['tahunSTR']}</td>
+                        <td class='{$tanggalSTR_class}'>" . htmlspecialchars($tanggalSTR) . "</td>
+                        <td>
+                            <a href='kabkot_edit.php?id={$row['id']}' class='btn btn-sm btn-warning'>Edit</a>
+                            <a href='kabkot_hapus.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Yakin hapus?\")'>Hapus</a>
+                        </td>
+                    </tr>";
+                    $no++;
+                }
+
+                if ($filtered_total === 0) {
+                    echo "<tr><td colspan='10' class='text-center text-muted'>Data tidak ditemukan</td></tr>";
+                }
                 ?>
                 </tbody>
-
             </table>
         </div>
 
