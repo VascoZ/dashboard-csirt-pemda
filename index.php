@@ -109,25 +109,21 @@
         ?>
 
         <p class="mb-2">
-            <strong>Total Provinsi:</strong> <?= $total_prov ?> data<br>
-            <strong>Total Kab/Kota:</strong> <?= $total_kabkot ?> data<br>
-            <strong>Total Keseluruhan:</strong> <?= $total_all ?> data
+            <strong>Total Keseluruhan:</strong> <?= $total_all ?> 
         </p>
         <p class="mb-0">
-            <strong>Total Teregistrasi:</strong> <?= $total_teregistrasi ?> data<br>
-            <strong>Total Terbentuk:</strong> <?= $total_terbentuk ?> data<br>
-            <strong>Total Proses:</strong> <?= $total_proses ?> data<br>
-            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> data
+            <strong>Total CSIRT Teregistrasi Administrasi Pemerintah:</strong> <?= $total_teregistrasi ?> <br>
+            <strong>Total Terbentuk:</strong> <?= $total_terbentuk ?> <br>
+            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> 
         </p>
     </div>
-
 
         <!-- Card: Status Provinsi -->
         <div class="card p-4">
             <h4>CSIRT Provinsi</h4>
             <ul class="mb-0">
                 <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?></li>
-                <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> d</li>
+                <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> </li>
                 <li>Proses: <?= $counts_prov['Proses'] ?> </li>
                 <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> </li>
             </ul>
@@ -140,9 +136,22 @@
             <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
             <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
             <li>Proses: <?= $counts_kabkot['Proses'] ?> d</li>
-            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> d</li>
+            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> </li>
         </ul>
     </div>
+
+    <!-- Gabungan Chart -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-4 text-center">
+                <h4>Gabungan CSIRT (Teregistrasi vs Belum Terbentuk)</h4>
+                <div class="chart-container">
+                    <canvas id="combinedChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Chart Row -->
     <div class="row">
