@@ -1,7 +1,6 @@
 <?php
 include 'conn.php';
-
-ob_start(); // ➜ Aktifkan output buffering agar header() bisa dipakai kapan saja
+ob_start(); // untuk mengaktifkan header()
 
 $id = $_GET['id'];
 $data = $conn->query("SELECT * FROM kabkot WHERE id = $id")->fetch_assoc();
@@ -15,15 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'];
     $tahunSTR = !empty($_POST['tahunSTR']) ? $_POST['tahunSTR'] : null;
     $tanggalSTR = !empty($_POST['tanggalSTR']) ? $_POST['tanggalSTR'] : null;
+    $referer = $_POST['referer'] ?? 'kabkot.php'; // default jika tidak ada referer
 
     $sql = "UPDATE kabkot SET nama = ?, id_provinsi = ?, email = ?, narahubung1 = ?, narahubung2 = ?, status = ?, tahunSTR = ?, tanggalSTR = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sissssssi", $nama, $id_provinsi, $email, $narahubung1, $narahubung2, $status, $tahunSTR, $tanggalSTR, $id);
 
     if ($stmt->execute()) {
-        // ✅ Redirect ke halaman sebelumnya
-        $redirect = $_SERVER['HTTP_REFERER'] ?? 'kabkot.php';
-        header("Location: $redirect");
+        header("Location: $referer");
         exit;
     } else {
         $error = "Gagal update: " . $stmt->error;
@@ -60,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
+            <input type="hidden" name="referer" value="<?= htmlspecialchars($_SERVER['HTTP_REFERER'] ?? 'kabkot.php') ?>">
+
             <div class="mb-3">
                 <label>Nama Kab/Kota</label>
                 <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($data['nama']) ?>" required>
