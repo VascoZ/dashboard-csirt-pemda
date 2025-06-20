@@ -196,7 +196,7 @@
                 </div>
             </div>
         </form>
-
+        <a href="kabkot_export_csv.php?search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>" class="btn btn-success mb-3">Export CSV</a>
         <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
         <?php
