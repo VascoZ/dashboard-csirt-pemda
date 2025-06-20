@@ -219,7 +219,7 @@
             </div>
         </form>
 
-        <a href="kabkot_export_csv.php?search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>" class="btn btn-success mb-3"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
+        <a href="kabkot_export_csv.php?search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>&filter_status=<?= urlencode($filter_status) ?>" class="btn btn-success mb-3"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
         <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
         <?php
