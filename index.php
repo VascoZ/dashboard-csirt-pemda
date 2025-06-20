@@ -147,7 +147,7 @@
             <strong>Total Keseluruhan:</strong> <?= $total_all ?> 
         </p>
         <p class="mb-0">
-            <strong>Total CSIRT Teregistrasi Administrasi Pemerintah:</strong> <?= $total_teregistrasi ?> <br>
+            <strong>Total CSIRT Teregistrasi:</strong> <?= $total_teregistrasi ?> <br>
             <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> 
         </p>
     </div>
