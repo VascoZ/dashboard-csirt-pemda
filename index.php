@@ -152,26 +152,32 @@
         </p>
     </div>
 
+    <div class="row">
         <!-- Card: Status Provinsi -->
-        <div class="card p-4">
-            <h4>CSIRT Provinsi</h4>
-            <ul class="mb-0">
-                <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?></li>
-                <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> </li>
-                <li>Proses: <?= $counts_prov['Proses'] ?> </li>
-                <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> </li>
-            </ul>
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4>CSIRT Provinsi</h4>
+                <ul class="mb-0">
+                    <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?></li>
+                    <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> </li>
+                    <li>Proses: <?= $counts_prov['Proses'] ?> </li>
+                    <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> </li>
+                </ul>
+            </div>
         </div>
 
-    <!-- Card: Status Kab/Kota -->
-    <div class="card p-4">
-        <h4>CSIRT Kab/Kota</h4>
-        <ul class="mb-0">
-            <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
-            <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
-            <li>Proses: <?= $counts_kabkot['Proses'] ?></li>
-            <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> </li>
-        </ul>
+        <!-- Card: Status Kab/Kota -->
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4>CSIRT Kab/Kota</h4>
+                <ul class="mb-0">
+                    <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
+                    <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
+                    <li>Proses: <?= $counts_kabkot['Proses'] ?></li>
+                    <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Gabungan Chart -->
