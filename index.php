@@ -129,7 +129,6 @@
     $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
     $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
     ?>
-
     <!-- Card: Peta -->
     <div class="card p-4 text-center">
         <h4 class="mb-3">Peta Indonesia</h4>
@@ -141,10 +140,10 @@
     <!-- Card: Total Gabungan -->
     <div class="card p-4">
         <h4>Total CSIRT Seluruh Indonesia</h4>
-        <p class="mb-0">
-            <li>Total Keseluruhan:</li> <?= $total_all ?></p>
-            <li>Total CSIRT Teregistrasi:</li <?= $total_teregistrasi ?><br>
-            <li>Total Belum Terbentuk:</li> <?= $total_belum ?>
+        <p class="mb-2">
+            <strong>Total Keseluruhan:</strong> <?= $total_all ?>
+            <strong>Total CSIRT Teregistrasi:</strong> <?= $total_teregistrasi ?><br>
+            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?>
         </p>
     </div>
 
