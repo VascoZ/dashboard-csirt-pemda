@@ -131,16 +131,30 @@
         <?php
         $search = trim($_GET['search'] ?? '');
         $search_by = $_GET['search_by'] ?? 'nama';
+        $filter_status = $_GET['filter_status'] ?? '';
 
-        $where_clause = '';
+        $where_conditions = [];
         if ($search !== '') {
             if ($search_by === 'provinsi') {
                 $search_safe = $conn->real_escape_string($search);
-                $where_clause = "WHERE provinsi.nama = '$search_safe'";
+                $where_conditions[] = "provinsi.nama = '$search_safe'";
             } else {
-                $where_clause = "WHERE kabkot.nama LIKE '%$search%'";
+                $search_safe = $conn->real_escape_string($search);
+                $where_conditions[] = "kabkot.nama LIKE '%$search_safe%'";
             }
         }
+
+        if ($filter_status !== '') {
+            if ($filter_status === 'Belum Terbentuk') {
+                $where_conditions[] = "(kabkot.status IS NULL OR kabkot.status = '' OR kabkot.status = '-')";
+            } else {
+                $status_safe = $conn->real_escape_string($filter_status);
+                $where_conditions[] = "kabkot.status = '$status_safe'";
+            }
+        }
+
+        $where_clause = count($where_conditions) > 0 ? "WHERE " . implode(" AND ", $where_conditions) : "";
+
 
         $status_list = ['Teregistrasi', 'Terbentuk', 'Proses'];
         $counts = [];
@@ -191,11 +205,20 @@
                         <option value="provinsi" <?= $search_by === 'provinsi' ? 'selected' : '' ?>>Berdasarkan Nama Provinsi</option>
                     </select>
                 </div>
+                <div class="col-md-3">
+                    <select name="filter_status" class="form-select">
+                        <option value="">Semua Status</option>
+                        <?php foreach (['Teregistrasi', 'Terbentuk', 'Proses', 'Belum Terbentuk'] as $s): ?>
+                            <option value="<?= $s ?>" <?= (($_GET['filter_status'] ?? '') === $s) ? 'selected' : '' ?>><?= $s ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <div class="col-md-auto">
                     <button class="btn btn-outline-secondary" type="submit">Cari</button>
                 </div>
             </div>
         </form>
+
         <a href="kabkot_export_csv.php?search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>" class="btn btn-success mb-3"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
         <a href="kabkot_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
 
