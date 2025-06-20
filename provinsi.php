@@ -160,7 +160,9 @@
                 <li>Belum Terbentuk: <?= $counts['Belum Terbentuk'] ?> data</li>
             </ul>
         </div>
-
+        <a href="provinsi_export_excel.php" class="btn btn-success mb-3">
+            <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
         <a href="provinsi_tambah.php" class="btn btn-primary mb-3">Tambah Data</a>
         
         <div class="table-responsive">
