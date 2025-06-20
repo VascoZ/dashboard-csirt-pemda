@@ -21,16 +21,13 @@
             flex-direction: column;
             padding: 20px 0;
         }
-
         .sidebar h4 {
             color: #ffffff;
             font-weight: bold;
         }
-
         .sidebar .list-group {
             width: 100%;
         }
-
         .sidebar .list-group-item {
             background: none;
             border: none;
@@ -42,18 +39,15 @@
             gap: 12px;
             transition: background 0.2s ease;
         }
-
         .sidebar .list-group-item:hover {
             background-color: #2c2c44;
             color: #ffffff;
         }
-
         .sidebar .list-group-item.active {
             background-color: #0d6efd;
             color: #ffffff;
             font-weight: bold;
         }
-
         .content {
             flex-grow: 1;
             padding: 20px;
@@ -95,7 +89,6 @@
     </div>
 </div>
 
-
 <!-- Content -->
 <div class="content">
     <h2 class="mb-4">Dashboard CSIRT Pemda</h2>
@@ -128,53 +121,53 @@
     $row = $res->fetch_assoc();
     $counts_kabkot['Belum Terbentuk'] = (int)$row['total'];
     $total_kabkot = array_sum($counts_kabkot);
+
+    // Total CSIRT
+    $total_all = $total_prov + $total_kabkot;
+    $total_teregistrasi = $counts_prov['Teregistrasi'] + $counts_kabkot['Teregistrasi'];
+    $total_terbentuk = $counts_prov['Terbentuk'] + $counts_kabkot['Terbentuk'];
+    $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
+    $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
     ?>
 
     <!-- Card: Total Gabungan -->
     <div class="card p-4">
         <h4>Total CSIRT Seluruh Indonesia</h4>
-        <?php
-        $total_all = $total_prov + $total_kabkot;
-
-        // Gabungan status
-        $total_teregistrasi = $counts_prov['Teregistrasi'] + $counts_kabkot['Teregistrasi'];
-        $total_terbentuk = $counts_prov['Terbentuk'] + $counts_kabkot['Terbentuk'];
-        $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
-        $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
-        ?>
-
-        <p class="mb-2">
-            <strong>Total Keseluruhan:</strong> <?= $total_all ?> 
-        </p>
+        <p class="mb-2"><strong>Total Keseluruhan:</strong> <?= $total_all ?></p>
         <p class="mb-0">
-            <strong>Total CSIRT Teregistrasi:</strong> <?= $total_teregistrasi ?> <br>
-            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?> 
+            <strong>Total CSIRT Teregistrasi:</strong> <?= $total_teregistrasi ?><br>
+            <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?>
         </p>
     </div>
 
+    <!-- Card: Peta -->
+    <div class="card p-4 text-center">
+        <h4 class="mb-3">Peta Indonesia</h4>
+        <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+            <?php echo file_get_contents('assets/indonesia.svg'); ?>
+        </div>
+    </div>
+
     <div class="row">
-        <!-- Card: Status Provinsi -->
         <div class="col-md-6">
             <div class="card p-4">
                 <h4>CSIRT Provinsi</h4>
                 <ul class="mb-0">
                     <li>Teregistrasi: <?= $counts_prov['Teregistrasi'] ?></li>
-                    <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?> </li>
-                    <li>Proses: <?= $counts_prov['Proses'] ?> </li>
-                    <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?> </li>
+                    <li>Terbentuk: <?= $counts_prov['Terbentuk'] ?></li>
+                    <li>Proses: <?= $counts_prov['Proses'] ?></li>
+                    <li>Belum Terbentuk: <?= $counts_prov['Belum Terbentuk'] ?></li>
                 </ul>
             </div>
         </div>
-
-        <!-- Card: Status Kab/Kota -->
         <div class="col-md-6">
             <div class="card p-4">
                 <h4>CSIRT Kab/Kota</h4>
                 <ul class="mb-0">
-                    <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?> </li>
-                    <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?> </li>
+                    <li>Teregistrasi: <?= $counts_kabkot['Teregistrasi'] ?></li>
+                    <li>Terbentuk: <?= $counts_kabkot['Terbentuk'] ?></li>
                     <li>Proses: <?= $counts_kabkot['Proses'] ?></li>
-                    <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?> </li>
+                    <li>Belum Terbentuk: <?= $counts_kabkot['Belum Terbentuk'] ?></li>
                 </ul>
             </div>
         </div>
@@ -191,7 +184,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Chart Row -->
     <div class="row">
@@ -218,19 +210,13 @@
 <script>
     window.statusChartLabelsProv = <?= json_encode(array_keys($counts_prov)) ?>;
     window.statusChartDataProv = <?= json_encode(array_values($counts_prov)) ?>;
-
     window.statusChartLabelsKabkot = <?= json_encode(array_keys($counts_kabkot)) ?>;
     window.statusChartDataKabkot = <?= json_encode(array_values($counts_kabkot)) ?>;
+    window.combinedChartLabels = ['Teregistrasi', 'Belum Terbentuk'];
+    window.combinedChartData = [<?= $total_teregistrasi ?>, <?= $total_belum ?>];
 </script>
 
 <!-- Chart.js -->
- <script>
-    window.combinedChartLabels = ['Teregistrasi', 'Belum Terbentuk'];
-    window.combinedChartData = [
-        <?= $total_teregistrasi ?>,
-        <?= $total_belum ?>
-    ];
-</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     new Chart(document.getElementById('statusPieChartProvinsi'), {
@@ -243,24 +229,22 @@
             }]
         }
     });
-// Chart Gabungan Teregistrasi vs Belum Terbentuk
-new Chart(document.getElementById('combinedChart'), {
-    type: 'doughnut',
-    data: {
-        labels: window.combinedChartLabels,
-        datasets: [{
-            data: window.combinedChartData,
-            backgroundColor: ['#4CAF50', '#F44336']
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                position: 'bottom'
+
+    new Chart(document.getElementById('combinedChart'), {
+        type: 'doughnut',
+        data: {
+            labels: window.combinedChartLabels,
+            datasets: [{
+                data: window.combinedChartData,
+                backgroundColor: ['#4CAF50', '#F44336']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { position: 'bottom' }
             }
         }
-    }
-});
+    });
 
     new Chart(document.getElementById('statusPieChartKabkot'), {
         type: 'pie',
