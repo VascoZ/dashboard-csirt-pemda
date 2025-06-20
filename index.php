@@ -129,6 +129,14 @@
     $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
     $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
     ?>
+    
+    <!-- Card: Peta -->
+    <div class="card p-4 text-center">
+        <h4 class="mb-3">Peta Indonesia</h4>
+        <div style="width: 100%; max-width: 900px; margin: 0 auto;">
+            <?php echo file_get_contents('assets/indonesia.svg'); ?>
+        </div>
+    </div>
 
     <!-- Card: Total Gabungan -->
     <div class="card p-4">
@@ -140,13 +148,7 @@
         </p>
     </div>
 
-    <!-- Card: Peta -->
-    <div class="card p-4 text-center">
-        <h4 class="mb-3">Peta Indonesia</h4>
-        <div style="width: 100%; max-width: 900px; margin: 0 auto;">
-            <?php echo file_get_contents('assets/indonesia.svg'); ?>
-        </div>
-    </div>
+
 
     <div class="row">
         <div class="col-md-6">
