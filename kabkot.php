@@ -123,7 +123,11 @@
 <div class="content">
     <div class="card">
         <h2 class="mb-3">Data Kabupaten/Kota</h2>
-
+        <?php
+        $total_result = $conn->query("SELECT COUNT(*) AS total FROM kabkot");
+        $total_row = $total_result->fetch_assoc();
+        echo "<p><strong>Total Kabupaten/Kota:</strong> {$total_row['total']} data</p>";
+        ?>
         <?php
         $search = trim($_GET['search'] ?? '');
         $search_by = $_GET['search_by'] ?? 'nama';
