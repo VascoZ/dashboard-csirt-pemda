@@ -141,7 +141,7 @@
     <div class="card p-4">
         <h4>Total CSIRT Seluruh Indonesia</h4>
         <p class="mb-2">
-            <strong>Total Keseluruhan:</strong> <?= $total_all ?>
+            <strong>Total Keseluruhan:</strong> <?= $total_all ?><br>
             <strong>Total CSIRT Teregistrasi:</strong> <?= $total_teregistrasi ?><br>
             <strong>Total Belum Terbentuk:</strong> <?= $total_belum ?>
         </p>
