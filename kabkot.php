@@ -328,7 +328,7 @@
             <ul class="pagination">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>"><?= $i ?></a>
+                        <a class="page-link" href="?page=<?= $i ?>&sort=<?= $sort ?>&order=<?= $order ?>&search=<?= urlencode($search) ?>&search_by=<?= $search_by ?>&filter_status=<?= urlencode($filter_status) ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
