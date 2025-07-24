@@ -127,7 +127,7 @@
     $total_teregistrasi = $counts_prov['Teregistrasi'] + $counts_kabkot['Teregistrasi'];
     $total_terbentuk = $counts_prov['Terbentuk'] + $counts_kabkot['Terbentuk'];
     $total_proses = $counts_prov['Proses'] + $counts_kabkot['Proses'];
-    $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'];
+    $total_belum = $counts_prov['Belum Terbentuk'] + $counts_kabkot['Belum Terbentuk'] + $counts_kabkot['Proses'];
     ?>
     <!-- Card: Peta -->
     <div class="card p-4 text-center">
